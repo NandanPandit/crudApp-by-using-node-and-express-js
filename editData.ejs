@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit form</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Edit form</h2>
+      <div class="form">
+        <label for="fname">Firstname: -</label><br />
+        <input
+          type="text"
+          name="firstname"
+          id="fname"
+          autocomplete="off" /><br />
+
+        <label for="lname">Lastname: -</label><br />
+        <input
+          type="text"
+          name="lastname"
+          id="lname"
+          autocomplete="off" /><br />
+
+        <label for="email">Email: -</label><br />
+        <input
+          type="text"
+          name="useremail"
+          id="emailid"
+          autocomplete="off" /><br />
+
+        <label for="password">Password: -</label><br />
+        <input type="password" name="pass" id="password" /><br />
+
+        <button type="submit" id="editData">Edit data</button>
+      </div>
+    </div>
+
+    <script>
+      const editBtn = document.getElementById("editData");
+      editBtn.addEventListener("click", () => {
+        let firstname = document.getElementById("fname").value;
+        let lastname = document.getElementById("lname").value;
+        let email = document.getElementById("emailid").value;
+        let password = document.getElementById("password").value;
+
+        //fetch api
+        const editForm = {
+              firstname: firstname,
+              lastname: lastname,
+              email: email,
+              password: password,
+            };
+            fetch("/edit", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(editForm),
+            })
+              .then((response) => {
+                console.log("Edit response>>>>>>>>>>", response);
+                return response.json();
+              }).then((data)=>{
+                console.log("Data????????????",data);
+                const  userId = edit.getAttribute("data-id");
+                console.log("userId is >>>>>",userId);
+              })
+              .catch((error) => {
+                console.log("Error find>>>>>>>>>>", error);
+              });
+        
+      })
+    </script>
+  </body>
+</html>

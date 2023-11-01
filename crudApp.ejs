@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Curd Application</title>
+    <style>
+      /* first form insert data */
+      body{
+        font-family: "Arial", sans-serif;
+        font-weight: 500;
+      }
+      .container {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height:500px;
+      }
+
+      .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        max-width: 100%;
+        text-align: center;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #312f2f;
+        text-align: left;
+        margin-left: 12px;
+      }
+
+      input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      #submitBtn {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 18px;
+      }
+
+      #submitBtn:hover {
+        background-color: #0d1d0e;
+      }
+      /* Table all css */
+
+      .table-container {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: auto;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 1000px;
+        margin: 20px;
+        box-shadow: 0 0 10px rgba(15, 15, 15, 0.1);
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        border: 1px solid #00bc09;
+      }
+
+      th {
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+      }
+
+      tr:hover {
+        background-color: #f5f5f5;
+      }
+
+      #editBtn {
+        background-color: #4caf50;
+        color: #ffffff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-align: center;
+      }
+      #deleteBtn{
+        background-color: #ff1e1e;
+        color: #ffffff;
+        border: none;
+        padding: 8px 13px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-align: center;
+      }
+      #editBtn:hover {
+        background-color: #1a1c1a;
+      }
+      #deleteBtn:hover{
+        background-color: #3e3535;
+      }
+
+      /* Second form model to update data*/
+      #container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #00000080;
+      }
+
+      .form-content {
+        width: 300px;
+        background: #ffffff;
+        margin: 80px auto;
+        padding: 30px;
+        border-radius: 5px;
+      }
+      .label {
+        color: #312f2f;
+        text-align: left;
+        margin-left: 5px;
+      }
+      .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #updateBtn{
+        padding: 8px 12px;
+        background-color: #35d92f;
+        color: #ffffff;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+      #closeForm{
+        padding: 8px 12px;
+        background-color: #ff0303;
+        color: #ffffff;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        <h2>Insert Data</h2>
+        <label for="fname">Firstname:</label>
+        <input
+          type="text"
+          name="firstname"
+          id="fname"
+          placeholder="Enter firstname.."
+          autocomplete="off"
+          autofocus />
+
+        <label for="lname">Lastname:</label>
+        <input
+          type="text"
+          name="lastname"
+          id="lname"
+          placeholder="Enter lastname.."
+          autocomplete="off" />
+
+        <label for="email">Email:</label>
+        <input
+          type="text"
+          name="useremail"
+          id="email"
+          placeholder="Enter email.."
+          autocomplete="off" />
+
+        <label for="ps">Password:</label>
+        <input
+          type="password"
+          name="userpassword"
+          id="password"
+          placeholder="Enter password.."
+          autocomplete="off" />
+
+        <button type="submit" id="submitBtn">Submit</button>
+      </div>
+    </div>
+
+    
+    <div class="table-container">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email id</th>
+            <th>Password</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <%for(let user of userData){%>
+          <tr>
+            <td><%- user.id %></td>
+            <td id="userFirstname"><%- user.first_name %></td>
+            <td id="userLastname"><%- user.last_name %></td>
+            <td id="userEmail"><%- user.email %></td>
+            <td id="userPass"><%- user.password %></td>
+            <td><button data-id="<%- user.id %>" id="editBtn" class="editbtn">Edit</button></td>
+            <td>
+              <button data-id="<%- user.id %>" id="deleteBtn">Delete</button>
+            </td>
+          </tr>
+          <%}%>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Start code for edit form  -->
+    <div id="container">
+      <div class="form-content">
+        <div class="form-header">
+          <h4>Update User Data</h4>
+          <button id="closeForm">Close</button>
+        </div>
+        <div class="form-body">
+          <label for="editFirstName" class="label">Firstname: -</label><br />
+          <input
+            type="text"
+            name="first_name"
+            id="editFirstName"
+            placeholder="Enter firstname.."
+            autocomplete="off" /><br />
+
+          <label for="editLastName" class="label">Lastname: -</label><br />
+          <input
+            type="text"
+            name="last_name"
+            id="editLastName"
+            placeholder="Enter lastname.."
+            autocomplete="off" /><br />
+
+          <label for="editEmail" class="label">Email: -</label><br />
+          <input
+            type="text"
+            name="email"
+            id="editEmail"
+            placeholder="Enter email.."
+            autocomplete="off" /><br />
+
+          <label for="editPassword" class="label">Password: -</label><br />
+          <input
+            type="password"
+            name="password"
+            id="editPassword"
+            placeholder="Enter password.."
+            autocomplete="off" /><br />
+        </div>
+        <div class="form-footer">
+          <button id="updateBtn">Update Data</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Write fetch api code -->
+    <script>
+      let submitBtn = document.getElementById("submitBtn");
+      //function start
+      submitBtn.addEventListener("click", async () => {
+        let fname = document.getElementById("fname").value;
+        let lname = document.getElementById("lname").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+
+        let curdapp = {
+          firstname: fname,
+          lastname: lname,
+          useremail: email,
+          userpassword: password,
+        };
+        fetch("/crud-app", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(curdapp),
+        })
+          .then((response) => {
+            console.log("user response", response);
+            return response.json();
+          })
+          .then((data) => {
+            if (data.status) {
+              let tableBody = document.getElementById("tableBody");
+              let tableRow = document.createElement("tr");
+              console.log("My datataaaaa>>>>>>>>", data.insertId);
+
+              tableRow.innerHTML = `
+              <td>${data.insertId}</td>
+              <td>${curdapp.firstname}</td>
+              <td>${curdapp.lastname}</td>
+              <td>${curdapp.useremail}</td>
+              <td>${curdapp.userpassword}</td>
+
+              <td><button data-id="${data.insertId}" id="editBtn" class="editbtn">Edit</button></td>
+              <td><button data-id="${data.insertId}">Delete</button></td>
+              `;
+              tableBody.appendChild(tableRow);
+            }
+          })
+          .catch((error) => {
+            console.log("Error>>>>", error);
+          });
+      });
+      //function closed
+
+      //Delete api
+      const deletBtn = document.querySelectorAll("#deleteBtn");
+      deletBtn.forEach((deleteData) => {
+        deleteData.addEventListener("click", () => {
+          const deleteId = deleteData.getAttribute("data-id");
+
+          console.log("deleteId>>>>>>>>>>", deleteId);
+
+          //Delete API call
+          fetch("/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ deleteId: deleteId }),
+          })
+            .then((result) => {
+              return result.json();
+            })
+            .then((response) => {
+              if (response.status) {
+                alert("Delete data successfully !");
+
+                console.log("Response>>>>>>>>", response);
+                let removeRow = deleteData.parentNode.parentNode;
+                removeRow.remove();
+              } else {
+                console.log("Error>>>>>");
+              }
+            })
+            .catch((error) => {
+              console.log("Delete Error>>>>>>>>>", error);
+            });
+        });
+      });
+
+      //Edit form open and close
+      //open button
+      var editBtn = document.querySelectorAll("#editBtn");
+      var container = document.getElementById("container");
+
+      //when click on edit button then show model.
+      editBtn.forEach((edit) => {
+        edit.addEventListener("click", (event) => {
+          let selectRow = event.target.closest("tr");
+          console.log("Selected row", selectRow);
+
+          let userFirstname = selectRow.querySelector("#userFirstname").innerText;
+          let userLastname = selectRow.querySelector("#userLastname").innerText;
+          let userEmail = selectRow.querySelector("#userEmail").innerText;
+          let userPassword = selectRow.querySelector("#userPass").innerText;
+
+          //isme data bhejna hai
+          let editFirstName = document.getElementById("editFirstName");
+          let editLastName = document.getElementById("editLastName");
+          let editEmail = document.getElementById("editEmail");
+          let editPassword = document.getElementById("editPassword");
+
+          //Show all userdata in form
+          editFirstName.value = userFirstname;
+          editLastName.value = userLastname;
+          editEmail.value = userEmail;
+          editPassword.value = userPassword;
+
+          //now write a fetch api
+          const updateBtn = document.getElementById("updateBtn");
+          updateBtn.addEventListener("click", () => {
+            const updatedId = edit.getAttribute("data-id");
+            console.log("update id is >>>>>>>>>", updatedId);
+            const updateData = {
+              updatedId: updatedId,
+              editFirstName: editFirstName.value,
+              editLastName: editLastName.value,
+              editEmail: editEmail.value,
+              editPassword: editPassword.value,
+            };
+
+            fetch("/updateData", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(updateData)
+            })
+              .then((response) => {
+                // console.log("result json format is >>>>>>>", result.json());
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Update Response is >>>>>", data);
+                if (data.status) {
+                  alert("Data successfully updated!");
+                }
+              })
+              .catch((error) => {
+                console.log("Error update>>>>>>", error);
+              });
+            container.style.display = "none";
+          });
+
+          container.style.display = "block";
+        });
+      });
+        //Close form
+        const closeForm = document.getElementById("closeForm");
+        closeForm.addEventListener("click", () => {
+        container.style.display = "none";
+        });
+
+      
+    </script>
+  </body>
+</html>
